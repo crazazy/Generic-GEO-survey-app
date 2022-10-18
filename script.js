@@ -30,7 +30,7 @@ function updateLocation() {
 // get the location of the user upon loading the web page
 updateLocation();
 // mount the updating function to the button
-document.addEventListener("update", updateLocation);
+document.getElementById("update").addEventListener("click", updateLocation);
 
 // get a pretty image for the map from a tile server
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
