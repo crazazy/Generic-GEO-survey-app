@@ -1,3 +1,11 @@
 #map {
     height: 50vh;
 }
+
+.content {
+    padding: 0 5%;
+}
+
+.map {
+    margin: 0 0 5% 0;
+}

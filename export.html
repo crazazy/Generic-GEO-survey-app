@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Geo App</title>
+    <title>Export Data</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link
       rel="stylesheet"
@@ -22,7 +22,7 @@
     <main class="">
       <section class="top p-3">
         <h1 class="title text-center">
-          Geo-location App
+          Export
         </h1>
       </section>
       <section class="content">
@@ -31,15 +31,29 @@
         <div id="map" class="map">
         </div>
         
-        <!-- Collect Point Button -->
-        <div class="collect text-center">
-          <button class="btn btn-primary col-12">Collect Point Here</button>
+        <div class="text-center">
+            <p class="d-inline">Visualization: &nbsp;&nbsp;&nbsp;</p>
+        
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                <label class="form-check-label" for="inlineRadio1">Points</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                <label class="form-check-label" for="inlineRadio2">Lines</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                <label class="form-check-label" for="inlineRadio3">Polygons</label>
+            </div>
         </div>
 
-        <!-- Options -->
+        <!-- Export Options -->
         <div class="options text-center my-3">
-          <a href="export.html" class="btn btn-secondary col-12">Finish</a>
-        </div>
+            <a href="#" class="btn btn-secondary col-12 my-2">Export as Points</a>
+            <a href="#" class="btn btn-secondary col-12 my-2">Export as Lines</a>
+            <a href="#" class="btn btn-secondary col-12 my-2">Export as Polygons</a>
+          </div>
       </section>
       <section class="bottom">
 

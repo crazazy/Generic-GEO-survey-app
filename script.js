@@ -14,7 +14,7 @@ geo({
   timeout: 5000,
   maximumAge: 0
 })
-  // pnly the coords are useful
+  // only the coords are useful
   .then((pos) => pos.coords)
   // this is where all the basic map manipulation happens
   .then((crd) => {
