@@ -25,7 +25,7 @@ function updateLocation() {
             // add a marker for a precise location
             L.marker(pos).addTo(map);
         })
-        .catch((err) => (document.body.innerHTML += err.toString()));
+        .catch((err) => document.body.innerHTML += err.message);
 }
 // get the location of the user upon loading the web page
 updateLocation();
