@@ -1,11 +1,12 @@
-#map {
-    height: 50vh;
-}
-
 .content {
     padding: 0 5%;
 }
 
 .map {
+    height: 50vh;
     margin: 0 0 5% 0;
+}
+
+.hidden-elements {
+    display: none;
 }
