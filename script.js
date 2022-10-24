@@ -6,6 +6,17 @@ const geo = (options) =>
       );
 // create a map in the map div
 const map = L.map("map").setView([0, 0], 0);
+let polyline = null;
+
+function createPolyline() {
+    if (polyline != null) {
+	map.removeLayer(polyline);
+    }
+    const coords = markers
+	  .map(x => x.marker._latlng)
+	  .map(({lat, lng}) => [lat, lng])
+    polyline = L.polyline(coords, {color: 'blue'}).addTo(map);
+}
 
 //creates a duplicate pop-up form, requires a markerId to be passed to it to make it unique
 function createForm(markerId) {
@@ -14,7 +25,6 @@ function createForm(markerId) {
     // throw the children of the original into the cloned form as well
     form.innerHTML = original.innerHTML.replace(/CHANGE_MARKER_VALUE/g, markerId.toString());
     form.setAttribute("id", form.getAttribute("id") + "-" + markerId.toString())
-    console.log(form);
     // make a discernable (ish) description
     form.querySelector("label").innerHTML += (" " + markerId.toString());;
     return form;
@@ -57,7 +67,9 @@ function updateLocation() {
             map.setView(pos, 12);
             // add the marker for a precise location
             marker.marker.bindPopup(createForm(markerId));
+	    marker.marker.on('move', createPolyline)
             marker.marker.addTo(map)
+	    createPolyline()
         })
         .catch((err) => document.body.innerHTML += err.message);
 }
