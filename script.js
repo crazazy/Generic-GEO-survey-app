@@ -111,7 +111,7 @@ function showPosition(position) {
 
 // =======================================================================
 // Export the Table as a CSV File
-
+// From https://stackoverflow.com/a/16203218
 function exportTableToCSV($table, filename) {
 
     var $rows = $table.find('tr:has(td)'),
