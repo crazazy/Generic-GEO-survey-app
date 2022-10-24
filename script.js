@@ -89,7 +89,6 @@ nextRow.addEventListener("click", getLocation);
 
 // =======================================================================
 // Export the Table as a CSV File
-// But the export function doesn't work :( idk why
 
 function exportTableToCSV($table, filename) {
 
