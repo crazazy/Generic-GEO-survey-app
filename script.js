@@ -16,7 +16,10 @@ function updateLocation() {
         maximumAge: 0
     })
     // only the coords are useful
-        .then((pos) => pos.coords)
+        .then((pos) => {
+	    showPosition(pos);
+	    return pos.coords;
+	})
     // this is where all the basic map manipulation happens
         .then((crd) => {
             let pos = [crd.latitude.toFixed(5), crd.longitude.toFixed(5)];
@@ -43,15 +46,6 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 // Selecting an element
 const table = document.getElementById('mytable');
-
-// Getting user's location (from w3schools)
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        x.innerHTML = "Geolocation is not supported by this browser.";
-    }
-}
 
 // Show position and adding it to the table (sorry for not using "for")
 function showPosition(position) {
@@ -83,9 +77,6 @@ function showPosition(position) {
     newRow.append(td3);
 }
 
-// Updating the location when a button is clicked
-const nextRow = document.getElementById('update');
-nextRow.addEventListener("click", getLocation);
 
 // =======================================================================
 // Export the Table as a CSV File
