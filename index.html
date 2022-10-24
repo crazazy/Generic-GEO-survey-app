@@ -79,10 +79,11 @@
     </footer>
     <div class="hidden-elements">
       <form id="popup-form">
+	<!-- CHANGE_MARKER_VALUE gets swapped out with markerId upon cloning the contents-->
         <label for="description">Description: </label><br/>
         <input type="text" name="description"/><br/>
         <input type="hidden" name="markerId" value="CHANGE_MARKER_VALUE">
-        <input type="submit" value="Save Edit"><br/>
+        <input type="submit" value="Save Edit" onclick="updateDesc(event, CHANGE_MARKER_VALUE)"><br/>
       </form>
     </div>
 

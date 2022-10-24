@@ -12,13 +12,21 @@ function createForm(markerId) {
     const original = document.getElementById("popup-form")
     const form = original.cloneNode();
     // throw the children of the original into the cloned form as well
-    form.innerHTML = original.innerHTML;
+    form.innerHTML = original.innerHTML.replace(/CHANGE_MARKER_VALUE/g, markerId.toString());
     form.setAttribute("id", form.getAttribute("id") + "-" + markerId.toString())
     console.log(form);
     // make a discernable (ish) description
-    form.querySelector("label").innerHTML += (" " + markerId.toString());
-    form.querySelector("input[name=\"markerId\"]").setAttribute("value", markerId.toString());
+    form.querySelector("label").innerHTML += (" " + markerId.toString());;
     return form;
+}
+
+// update the description in the list of markers
+function updateDesc(event, markerId) {
+    event.preventDefault();
+    // find the description
+    const descNode = event.target.form.querySelector("input[type=\"text\"]");
+    const desc = descNode.value;
+    markers[markerId].desc = desc
 }
 //updates the location on the map
 function updateLocation() {
