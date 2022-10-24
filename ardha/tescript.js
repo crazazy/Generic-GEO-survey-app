@@ -1,33 +1,10 @@
 // turn the geolocation API into a Promise because callbacks are horrible
-let markers = [];
 const geo = (options) =>
-      new Promise((resolve, reject) =>
-          navigator.geolocation.getCurrentPosition(resolve, reject, options)
-      );
+    new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, options)
+    );
 // create a map in the map div
 const map = L.map("map").setView([0, 0], 0);
-
-//creates a duplicate pop-up form, requires a markerId to be passed to it to make it unique
-function createForm(markerId) {
-    const original = document.getElementById("popup-form")
-    const form = original.cloneNode();
-    // throw the children of the original into the cloned form as well
-    form.innerHTML = original.innerHTML.replace(/CHANGE_MARKER_VALUE/g, markerId.toString());
-    form.setAttribute("id", form.getAttribute("id") + "-" + markerId.toString())
-    console.log(form);
-    // make a discernable (ish) description
-    form.querySelector("label").innerHTML += (" " + markerId.toString());;
-    return form;
-}
-
-// update the description in the list of markers
-function updateDesc(event, markerId) {
-    event.preventDefault();
-    // find the description
-    const descNode = event.target.form.querySelector("input[type=\"text\"]");
-    const desc = descNode.value;
-    markers[markerId].desc = desc
-}
 //updates the location on the map
 function updateLocation() {
     //set options as per the source of
@@ -38,44 +15,33 @@ function updateLocation() {
         timeout: 5000,
         maximumAge: 0
     })
-    // only the coords are useful
+        // only the coords are useful
         .then((pos) => pos.coords)
-    // this is where all the basic map manipulation happens
+        // this is where all the basic map manipulation happens
         .then((crd) => {
             let pos = [crd.latitude.toFixed(5), crd.longitude.toFixed(5)];
-            const markerId = markers.length;
-            // a custom object containing the position and ID of a leaflet marker
-            const marker = {
-                pos, markerId,
-                marker: L.marker(pos, {title: markerId.toString(), draggable: true})
-            }
-            markers.push(marker)
             // center the map based on where we are, with a zoom level of 13
             map.setView(pos, 12);
-            // add the marker for a precise location
-            marker.marker.bindPopup(createForm(markerId));
-            marker.marker.addTo(map)
+            // add a marker for a precise location
+            L.marker(pos).addTo(map);
         })
         .catch((err) => document.body.innerHTML += err.message);
 }
 // get the location of the user upon loading the web page
-updateLocation();
+// updateLocation();
 // mount the updating function to the button
-document.getElementById("update").addEventListener("click", updateLocation);
+// document.getElementById("update").addEventListener("click", updateLocation);
 
 // get a pretty image for the map from a tile server
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-// =======================================================================
+// ==========================================================================================
 // Get Position in Latitude and Longitude and Create a Record Table
 
-// Selecting an element
 const table = document.getElementById('mytable');
-
-// Getting user's location (from w3schools)
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
@@ -84,7 +50,6 @@ function getLocation() {
     }
 }
 
-// Show position and adding it to the table (sorry for not using "for")
 function showPosition(position) {
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -114,13 +79,11 @@ function showPosition(position) {
     newRow.append(td3);
 }
 
-// Updating the location when a button is clicked
 const nextRow = document.getElementById('update');
 nextRow.addEventListener("click", getLocation);
 
-// =======================================================================
+// ====================================================================
 // Export the Table as a CSV File
-
 function exportTableToCSV($table, filename) {
 
     var $rows = $table.find('tr:has(td)'),
