@@ -1,8 +1,8 @@
 // turn the geolocation API into a Promise because callbacks are horrible
 const geo = (options) =>
-      new Promise((resolve, reject) =>
-          navigator.geolocation.getCurrentPosition(resolve, reject, options)
-      );
+    new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, options)
+    );
 // create a map in the map div
 const map = L.map("map").setView([0, 0], 0);
 //updates the location on the map
@@ -15,9 +15,9 @@ function updateLocation() {
         timeout: 5000,
         maximumAge: 0
     })
-    // only the coords are useful
+        // only the coords are useful
         .then((pos) => pos.coords)
-    // this is where all the basic map manipulation happens
+        // this is where all the basic map manipulation happens
         .then((crd) => {
             let pos = [crd.latitude.toFixed(5), crd.longitude.toFixed(5)];
             // center the map based on where we are, with a zoom level of 13
@@ -28,23 +28,20 @@ function updateLocation() {
         .catch((err) => document.body.innerHTML += err.message);
 }
 // get the location of the user upon loading the web page
-updateLocation();
+// updateLocation();
 // mount the updating function to the button
-document.getElementById("update").addEventListener("click", updateLocation);
+// document.getElementById("update").addEventListener("click", updateLocation);
 
 // get a pretty image for the map from a tile server
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-// =======================================================================
+// ==========================================================================================
 // Get Position in Latitude and Longitude and Create a Record Table
 
-// Selecting an element
 const table = document.getElementById('mytable');
-
-// Getting user's location (from w3schools)
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
@@ -53,7 +50,6 @@ function getLocation() {
     }
 }
 
-// Show position and adding it to the table (sorry for not using "for")
 function showPosition(position) {
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -83,14 +79,11 @@ function showPosition(position) {
     newRow.append(td3);
 }
 
-// Updating the location when a button is clicked
 const nextRow = document.getElementById('update');
 nextRow.addEventListener("click", getLocation);
 
-// =======================================================================
+// ====================================================================
 // Export the Table as a CSV File
-// But the export function doesn't work :( idk why
-
 function exportTableToCSV($table, filename) {
 
     var $rows = $table.find('tr:has(td)'),
