@@ -23,8 +23,10 @@
       <section class="content">
         <div class="row">
 
-          <!-- The map -->
-          <div id="map" class="map col-12 col-lg-6">
+          <!-- The map (and an undo button)-->
+          <div class="col-12 col-lg-6 d-flex">
+	    <button class="btn btn-primary me-1" onclick="undoHistory()">Undo</button>
+	    <div id="map" class="map"></div>
           </div>
   
           <!-- Options -->

@@ -1,5 +1,9 @@
-// turn the geolocation API into a Promise because callbacks are horrible
+// list of markers with metadata attached to it
 let markers = [];
+// list of the history of edited markers
+let history = [];
+
+// turn the geolocation API into a Promise because callbacks are horrible
 const geo = (options) =>
       new Promise((resolve, reject) =>
           navigator.geolocation.getCurrentPosition(resolve, reject, options)
@@ -7,6 +11,24 @@ const geo = (options) =>
 // create a map in the map div
 const map = L.map("map").setView([0, 0], 0);
 let polyline = null;
+
+// function-in-a-function semantics to pass the markerId to the marker that fired the event
+// leaflet doesn't really have a good way to store metadata in its map objects
+// adds a marker move to the history of marker moves
+const addHistory = markerId => function(event) {
+    const objPos = event.target._latlng;
+    markers[markerId].pos.unshift([objPos.lat, objPos.lng]);
+    history.push(markerId);
+}
+
+//undoes a marker move
+function undoHistory() {
+    if (history.length > 0) {
+	let undoMarker = markers[history.pop()];
+	undoMarker.pos.shift();
+	undoMarker.marker.setLatLng(undoMarker.pos[0]);
+    }
+}
 
 function createPolyline() {
     if (polyline != null) {
@@ -59,7 +81,8 @@ function updateLocation() {
             const markerId = markers.length;
             // a custom object containing the position and ID of a leaflet marker
             const marker = {
-                pos, markerId,
+                markerId,
+		pos: [pos],
                 marker: L.marker(pos, {title: markerId.toString(), draggable: true})
             }
             markers.push(marker)
@@ -68,6 +91,7 @@ function updateLocation() {
             // add the marker for a precise location
             marker.marker.bindPopup(createForm(markerId));
 	    marker.marker.on('move', createPolyline)
+	    marker.marker.on('dragend', addHistory(markerId))
             marker.marker.addTo(map)
 	    createPolyline()
         })
