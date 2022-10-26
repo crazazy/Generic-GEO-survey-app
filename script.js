@@ -108,6 +108,49 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+
+// Export the markers to geoJSON
+function exportJSON(type, shapeDesc="Undescripted") {
+    switch (type) {
+    case "points":
+        return JSON.stringify({
+            "type": "FeatureCollection",
+            "features": markers.map(marker => ({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": marker.pos.map(([lat, lng]) => [lng, lat])[0]
+                },
+                "properties": {
+                    "desc": marker.hasOwnProperty("desc")
+                        ? marker.desc
+                        : "Undescripted"
+                }
+            }))
+        })
+    case "line":
+        return JSON.stringify({
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": markers.map(marker => marker.pos.map(([lat, lng]) => [lng, lat])[0])
+            },
+            "properties": {
+                "desc": shapeDesc
+            }
+        })
+    case "polygon":
+        return JSON.stringify({
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                // wikipedia seems to imply that the last point of a polygon
+                // is the same as the first point
+                "coordinates": markers.concat(markers[0]).map(marker => marker.pos.map(([lat, lng]) => [lng, lat])[0])
+            }
+        })
+    }
+}
 // =======================================================================
 // Get Position in Latitude and Longitude and Create a Record Table
 
