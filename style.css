@@ -11,3 +11,7 @@
 .hidden-elements {
     display: none;
 }
+
+#lat, #lng {
+    display: none;
+}

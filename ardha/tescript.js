@@ -58,6 +58,12 @@ function showPosition(position) {
     const newRow = document.createElement('tr');
     table.append(newRow);
 
+    const row = document.getElementsByTagName('tr')
+    const tdId = document.createElement('td');
+    tdId.innerText = row.length;
+    tdId.setAttribute('class', 'row-item');
+    newRow.append(tdId);
+
     const td0 = document.createElement('td');
     td0.innerText = position.coords.latitude;
     td0.setAttribute('class', 'row-item');
