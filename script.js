@@ -168,34 +168,38 @@ function showPosition(position) {
 
     const tdId = document.createElement('td');
     tdId.innerText = markers.length + 1;
-    tdId.setAttribute('class', 'row-item');
+    tdId.classList.add('row-item');
+    tdId.classList.add('point');
     newRow.append(tdId);
 
     const td0 = document.createElement('td');
     td0.innerText = position.coords.latitude;
-    td0.setAttribute('id', 'lat');
-    td0.setAttribute('class', 'row-item');
+    td0.classList.add('row-item');
+    td0.classList.add('lat');
     newRow.append(td0);
 
     const td1 = document.createElement('td');
     td1.innerText = position.coords.longitude;
-    td1.setAttribute('id', 'lng');
-    td1.setAttribute('class', 'row-item');
+    td1.classList.add('row-item');
+    td1.classList.add('lng');
     newRow.append(td1);
 
     const td2 = document.createElement('td');
     td2.innerText = date;
-    td2.setAttribute('class', 'row-item');
+    td2.classList.add('row-item');
+    td2.classList.add('date');
     newRow.append(td2);
 
     const td3 = document.createElement('td');
-    td3.innerText = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();;
-    td3.setAttribute('class', 'row-item');
+    td3.innerText = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    td3.classList.add('row-item');
+    td3.classList.add('time');
     newRow.append(td3);
 
     const td4 = document.createElement('td');
     td4.innerText = markers.description;
-    td4.setAttribute('class', 'row-item');
+    td4.classList.add('row-item');
+    td4.classList.add('description');
     newRow.append(td4);
 
     if (markers.length == 0) {
@@ -228,7 +232,8 @@ function showPosition(position) {
 
     const td5 = document.createElement('td');
     td5.innerText = Math.round(distance * 10) / 10;
-    td5.setAttribute('class', 'row-item');
+    td5.classList.add('row-item');
+    td5.classList.add('distance');
     newRow.append(td5);
 }
 
@@ -315,3 +320,95 @@ $(".export").on('click', function (event) {
     // If CSV, don't do event.preventDefault() or return false
     // We actually need this to be a typical hyperlink
 });
+
+// Filters
+function pointIsChecked() {
+    let pointCol = document.getElementsByClassName('point');
+    if (document.getElementById('check-point').checked == false) {
+        for (i = 0; i < pointCol.length; i++ ) {
+            pointCol[i].classList.add("hide-column");
+        }
+    } else {
+        for (i = 0; i < pointCol.length; i++ ) {
+            pointCol[i].classList.remove("hide-column");
+        }
+    }
+}
+
+function latIsChecked() {
+    let latCol = document.getElementsByClassName('lat');
+    if (document.getElementById('check-lat').checked == false) {
+        for (i = 0; i < latCol.length; i++) {
+            latCol[i].classList.add("hide-column");
+        }
+    } else {
+        for (i = 0; i < latCol.length; i++) {
+            latCol[i].classList.remove("hide-column");
+        }
+    }
+}
+
+function lngIsChecked() {
+    let lngCol = document.getElementsByClassName('lng');
+    if (document.getElementById('check-lng').checked == false) {
+        for (i = 0; i < lngCol.length; i++) {
+            lngCol[i].classList.add("hide-column");
+        }
+    } else {
+        for (i = 0; i < lngCol.length; i++) {
+            lngCol[i].classList.remove("hide-column");
+        }
+    }
+}
+
+function dateIsChecked() {
+    let dateCol = document.getElementsByClassName('date');
+    if (document.getElementById('check-date').checked == false) {
+        for (i = 0; i < dateCol.length; i++) {
+            dateCol[i].classList.add("hide-column");
+        }
+    } else {
+        for (i = 0; i < dateCol.length; i++) {
+            dateCol[i].classList.remove("hide-column");
+        }
+    }
+}
+
+function timeIsChecked() {
+    let timeCol = document.getElementsByClassName('time');
+    if (document.getElementById('check-time').checked == false) {
+        for (i = 0; i < timeCol.length; i++ ) {
+            timeCol[i].classList.add("hide-column");
+        }
+    } else {
+        for (i = 0; i < timeCol.length; i++ ) {
+            timeCol[i].classList.remove("hide-column");
+        }
+    }
+}
+
+function descriptionIsChecked() {
+    let descriptionCol = document.getElementsByClassName('description');
+    if (document.getElementById('check-description').checked == false) {
+        for (i = 0; i < descriptionCol.length; i++ ) {
+            descriptionCol[i].classList.add("hide-column");
+        }
+    } else {
+        for (i = 0; i < descriptionCol.length; i++ ) {
+            descriptionCol[i].classList.remove("hide-column");
+        }
+    }
+}
+
+function distanceIsChecked() {
+    let distance = document.getElementsByClassName('distance');
+    if (document.getElementById('check-distance').checked == false) {
+        for (i = 0; i < distance.length; i++ ) {
+            distance[i].classList.add("hide-column");
+        }
+    } else {
+        for (i = 0; i < distance.length; i++ ) {
+            distance[i].classList.remove("hide-column");
+        }
+    }
+}
