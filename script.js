@@ -10,13 +10,15 @@ const geo = (options) =>
       );
 // create a map in the map div
 const map = L.map("map").setView([0, 0], 0);
+// this should happen every time the map changes
+document.getElementById("map").addEventListener("change", updateTable)
 let polyline = null;
 
 // function-in-a-function semantics to pass the markerId to the marker that fired the event
 // leaflet doesn't really have a good way to store metadata in its map objects
 // adds a marker move to the history of marker moves
 const addHistory = markerId => function(event) {
-    const objPos = event.target._latlng;
+    const objPos = event.target.getLatLng();
     markers[markerId].pos.unshift([objPos.lat, objPos.lng]);
     history.push(markerId);
 }
@@ -35,7 +37,7 @@ function createPolyline() {
 	map.removeLayer(polyline);
     }
     const coords = markers
-	  .map(x => x.marker._latlng)
+	  .map(x => x.marker.getLatLng())
 	  .map(({lat, lng}) => [lat, lng])
     polyline = L.polyline(coords, {color: 'blue'}).addTo(map);
 }
@@ -72,7 +74,7 @@ function updateLocation() {
     })
     // only the coords are useful
         .then((pos) => {
-	    showPosition(pos);
+	    // showPosition(pos); //not neccesary
 	    return pos.coords;
 	})
     // this is where all the basic map manipulation happens
@@ -83,6 +85,7 @@ function updateLocation() {
             const marker = {
                 markerId,
 		pos: [pos],
+                timestamp: Date.now(),
                 marker: L.marker(pos, {title: markerId.toString(), draggable: true})
             }
             markers.push(marker)
@@ -92,6 +95,7 @@ function updateLocation() {
             marker.marker.bindPopup(createForm(markerId));
 	    marker.marker.on('move', createPolyline)
 	    marker.marker.on('dragend', addHistory(markerId))
+       	    marker.marker.on('dragend', updateTable)
             marker.marker.addTo(map)
 	    createPolyline()
         })
@@ -156,6 +160,39 @@ function exportJSON(type, shapeDesc="Undescripted") {
 
 // Selecting an element
 const table = document.getElementById('mytable');
+// old table content for if we want to update the entire table
+const emptyTableContent = table.innerHTML;
+
+function updateTable() {
+    // empty the entire table
+    table.innerHTML = emptyTableContent;
+    for (marker of markers) {
+        const [lat, lng] = marker.pos[0];
+        let distance = 0
+        if (marker.markerId > 0) {
+            const prevMarker = markers[marker.markerId - 1].marker
+            distance = marker.marker.getLatLng().distanceTo(prevMarker.getLatLng());
+        }
+        const time = new Date(marker.timestamp);
+        // done in the order of tbody#mytable
+        const tableData = [ marker.markerId + 1, // Point id
+                            //lat,                 // latitude
+                            //0lng,                 // longitude
+                            time.toDateString(), // date
+                            time.toTimeString(), // time
+                            marker.desc,         // description
+                            distance             // distance
+                          ]
+        const tr = document.createElement('tr');
+        for (datum of tableData) {
+            const td = document.createElement('td');
+            td.setAttribute('class', 'row-item');
+            td.innerText = datum;
+            tr.append(td)
+        }
+        table.append(tr);
+    }
+}
 
 // Show position and adding it to the table
 function showPosition(position) {
