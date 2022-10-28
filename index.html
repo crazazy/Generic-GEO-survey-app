@@ -49,19 +49,34 @@
             <button id="update" class="btn btn-success col-6">Collect Point Here</button>
           </div>
 
-          <!-- Filters -->
+          <!-- Accordion -->
           <div class="accordion" id="accordionExample">
             <div class="accordion-item">
               <h2 class="accordion-header" id="headingOne">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                   data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Filters
+                  Options
                 </button>
               </h2>
               <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                 data-bs-parent="#accordionExample">
                 <div class="accordion-body">
+                  <!-- Basemap Options -->
+                  <div class="basemap row mb-3">
+                    <h6>Basemap:</h6>
+                    <div id="basic-map" class="basic-map col-6 col-sm-4 map-selected">
+                      <p class="d-block text-center py-2 my-0">Basic Map</p>
+                    </div>
+                    <div id="dark-map" class="dark-map col-6 col-sm-4">
+                      <p class="d-block text-center py-2 my-0">Dark Map</p>
+                    </div>
+                    <div id="imagery-map" class="imagery-map col-6 col-sm-4">
+                      <p class="d-block text-center py-2 my-0">World Imagery</p>
+                    </div>
+                  </div>
+                  <!-- Attributes -->
                   <div class="filters mb-3">
+                    <h6>Table Attributes:</h6>
                     <div class="row checkbox">
                       <div class="form-check form-check-inline col-6 col-sm-4 col-md-3 mx-0">
                         <input class="form-check-input" type="checkbox" value="" id="check-point" onclick="pointIsChecked()" checked>
