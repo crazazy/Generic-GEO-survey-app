@@ -12,6 +12,10 @@
     display: none;
 }
 
-#lat, #lng {
+.hide-column {
     display: none;
+}
+
+#dvData {
+    overflow: scroll;
 }
