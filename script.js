@@ -235,6 +235,14 @@ function showPosition(position) {
     td5.classList.add('row-item');
     td5.classList.add('distance');
     newRow.append(td5);
+
+    pointIsChecked();
+    latIsChecked();
+    lngIsChecked();
+    dateIsChecked();
+    timeIsChecked();
+    descriptionIsChecked();
+    distanceIsChecked();
 }
 
 
