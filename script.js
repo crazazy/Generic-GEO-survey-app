@@ -34,6 +34,7 @@ function undoHistory() {
             map.removeLayer(undoMarker)
         }
     }
+    updateTable()
 }
 
 function createPolyline() {
