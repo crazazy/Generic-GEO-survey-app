@@ -101,8 +101,12 @@ function updateLocation() {
         })
         .catch((err) => document.body.innerHTML += err.message);
 }
-// get the location of the user upon loading the web page
-updateLocation();
+// get the location of the user upon loading the web page (don't put a marker down yet)
+geo()
+    .then(pos => pos.coords)
+    .then({latitude, longitude} => {
+        map.setView([latitude, longitude], 12)
+    })
 // mount the updating function to the button
 document.getElementById("update").addEventListener("click", updateLocation);
 
