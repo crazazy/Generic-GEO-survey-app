@@ -21,7 +21,7 @@ html {
 }
 
 .landing h1 span {
-    color: rgb(99, 177, 99);
+    color: rgb(91, 181, 100);
 }
 
 .landing p {
@@ -49,10 +49,6 @@ html {
 #dvData {
     overflow: scroll;
     max-height: 60vh;
-}
-
-#dvData h5 {
-    color: rgb(66, 129, 66);
 }
 
 .map-selected {
