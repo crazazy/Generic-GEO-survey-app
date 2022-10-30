@@ -208,113 +208,24 @@ function updateTable() {
         }
         const time = new Date(marker.timestamp);
         // done in the order of tbody#mytable
-        const tableData = [ marker.markerId + 1, // Point id
-                            //lat,                 // latitude
-                            //0lng,                 // longitude
-                            time.toDateString(), // date
-                            time.toTimeString(), // time
-                            marker.desc,         // description
+        const tableData = { point: marker.markerId + 1, // Point id
+                            lat,                 // latitude
+                            lng,                 // longitude
+                            date: time.toDateString(), // date
+                            time: time.toTimeString(), // time
+                            description: marker.desc,         // description
                             distance             // distance
-                          ]
+                           }
         const tr = document.createElement('tr');
-        for (datum of tableData) {
+        for (datum in tableData) {
             const td = document.createElement('td');
-            td.setAttribute('class', 'row-item');
-            td.innerText = datum;
+            td.setAttribute('class', 'row-item ' + datum);
+            td.innerText = tableData[datum];
             tr.append(td)
         }
         table.append(tr);
     }
 }
-
-// Show position and adding it to the table
-function showPosition(position) {
-    var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-    const newRow = document.createElement('tr');
-    table.append(newRow);
-
-    const tdId = document.createElement('td');
-    tdId.innerText = markers.length + 1;
-    tdId.classList.add('row-item');
-    tdId.classList.add('point');
-    newRow.append(tdId);
-
-    const td0 = document.createElement('td');
-    td0.innerText = position.coords.latitude;
-    td0.classList.add('row-item');
-    td0.classList.add('lat');
-    newRow.append(td0);
-
-    const td1 = document.createElement('td');
-    td1.innerText = position.coords.longitude;
-    td1.classList.add('row-item');
-    td1.classList.add('lng');
-    newRow.append(td1);
-
-    const td2 = document.createElement('td');
-    td2.innerText = date;
-    td2.classList.add('row-item');
-    td2.classList.add('date');
-    newRow.append(td2);
-
-    const td3 = document.createElement('td');
-    td3.innerText = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    td3.classList.add('row-item');
-    td3.classList.add('time');
-    newRow.append(td3);
-
-    const td4 = document.createElement('td');
-    td4.innerText = markers.description;
-    td4.classList.add('row-item');
-    td4.classList.add('description');
-    newRow.append(td4);
-
-    if (markers.length == 0) {
-        var distance = 0;
-    }
-    else {
-        // From https://stackoverflow.com/a/13841047
-        function dist(lon1, lat1, lon2, lat2) {
-            var R = 6371; // Radius of the earth in km
-            var dLat = (lat2-lat1).toRad();  // Javascript functions in radians
-            var dLon = (lon2-lon1).toRad(); 
-            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                    Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
-                    Math.sin(dLon/2) * Math.sin(dLon/2); 
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-            var d = R * c * 1000; // Distance in km
-            return d;
-        }
-        /** Converts numeric degrees to radians */
-        if (typeof(Number.prototype.toRad) === "undefined") {
-            Number.prototype.toRad = function() {
-            return this * Math.PI / 180;
-            }
-        }
-        const row = document.getElementsByTagName('tr');
-        const prevLat = parseFloat(row[markers.length].childNodes[1].childNodes[0].nodeValue);
-        const prevLng = parseFloat(row[markers.length].childNodes[2].childNodes[0].nodeValue);
-        var distance = dist(prevLng, prevLat, position.coords.longitude, position.coords.latitude);
-    }
-
-    const td5 = document.createElement('td');
-    td5.innerText = Math.round(distance * 10) / 10;
-    td5.classList.add('row-item');
-    td5.classList.add('distance');
-    newRow.append(td5);
-
-    pointIsChecked();
-    latIsChecked();
-    lngIsChecked();
-    dateIsChecked();
-    timeIsChecked();
-    descriptionIsChecked();
-    distanceIsChecked();
-}
-
 
 // =======================================================================
 // Export the Table as a CSV File
