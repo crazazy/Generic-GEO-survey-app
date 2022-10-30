@@ -1,3 +1,33 @@
+html {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.landing {
+    /* Photo by Luiz Cent on <a href="https://unsplash.com/s/photos/map?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+   */
+    background: url("https://cdn.discordapp.com/attachments/1024326929609928804/1036186944843042836/luiz-cent-ZA6KIwNAJ-A-unsplash.jpg") rgba(0, 0, 0, 0.7) no-repeat center center/ cover;
+    background-blend-mode: multiply;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.landing h1 {
+    color: white;
+    font-size: 250%;
+    font-weight: 700;
+}
+
+.landing h1 span {
+    color: rgb(99, 177, 99);
+}
+
+.landing p {
+    color: rgb(218, 218, 218);
+    font-weight: 400;
+}
 
 .content {
     padding: 0 5%;
@@ -18,6 +48,11 @@
 
 #dvData {
     overflow: scroll;
+    max-height: 60vh;
+}
+
+#dvData h5 {
+    color: rgb(66, 129, 66);
 }
 
 .map-selected {
@@ -39,5 +74,14 @@
 @media only screen and (min-width: 768px) {
     .map {
         height: 80vh;
+    }
+
+    .landing h1 {
+        font-size: 300%;
+        font-weight: 700;
+    }
+
+    .landing p {
+        font-size: 110%;
     }
 }

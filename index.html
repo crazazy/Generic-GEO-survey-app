@@ -21,6 +21,11 @@
 
   <!-- JQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+  <!-- Google Font (Open Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -28,145 +33,17 @@
 
   </header>
   <main class="">
-    <section class="top p-3">
-      <h1 class="title text-center">
-        Geo-location App
-      </h1>
-    </section>
-    <section class="content">
-      <div class="row">
-
-        <!-- The map (and an undo button)-->
-        <div class="col-12 col-lg-6">
-          <button class="btn btn-secondary mb-2" onclick="undoHistory()"><i class="bi bi-arrow-counterclockwise"></i> Undo</button>
-          <div id="map" class="map"></div>
-        </div>
-
-        <!-- Options -->
-        <div class="option col-12 col-lg-6 my-auto">
-          <!-- Collect Point Button -->
-          <div class="collect text-center mb-4">
-            <button id="update" class="btn btn-success col-6">Collect Point Here</button>
-          </div>
-
-          <!-- Accordion -->
-          <div class="accordion" id="accordionExample">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Options
-                </button>
-              </h2>
-              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                  <!-- Basemap Options -->
-                  <div class="basemap row mb-3">
-                    <h6>Basemap:</h6>
-                    <div id="basic-map" class="basic-map col-6 col-sm-4 map-selected">
-                      <p class="d-block text-center py-2 my-0">Basic Map</p>
-                    </div>
-                    <div id="dark-map" class="dark-map col-6 col-sm-4">
-                      <p class="d-block text-center py-2 my-0">Dark Map</p>
-                    </div>
-                    <div id="imagery-map" class="imagery-map col-6 col-sm-4">
-                      <p class="d-block text-center py-2 my-0">World Imagery</p>
-                    </div>
-                  </div>
-                  <!-- Attributes -->
-                  <div class="filters mb-3">
-                    <h6>Table Attributes:</h6>
-                    <div class="row checkbox">
-                      <div class="form-check form-check-inline col-6 col-sm-4 col-md-3 mx-0">
-                        <input class="form-check-input" type="checkbox" value="" id="check-point" onclick="pointIsChecked()" checked>
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Point
-                        </label>
-                      </div>
-                      <div class="form-check form-check-inline col-6 col-sm-4 col-md-3 mx-0">
-                        <input class="form-check-input" type="checkbox" value="" id="check-lat" onclick="latIsChecked()" checked>
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Latitude
-                        </label>
-                      </div>
-                      <div class="form-check form-check-inline col-6 col-sm-4 col-md-3 mx-0">
-                        <input class="form-check-input" type="checkbox" value="" id="check-lng" onclick="lngIsChecked()" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Longitude
-                        </label>
-                      </div>
-                      <div class="form-check form-check-inline col-6 col-sm-4 col-md-3 mx-0">
-                        <input class="form-check-input" type="checkbox" value="" id="check-date" onclick="dateIsChecked()" checked>
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Date
-                        </label>
-                      </div>
-                      <div class="form-check form-check-inline col-6 col-sm-4 col-md-3 mx-0">
-                        <input class="form-check-input" type="checkbox" value="" id="check-time" onclick="timeIsChecked()" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Time
-                        </label>
-                      </div>
-                      <div class="form-check form-check-inline col-6 col-sm-4 col-md-3 mx-0">
-                        <input class="form-check-input" type="checkbox" value="" id="check-description" onclick="descriptionIsChecked()" checked>
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Description
-                        </label>
-                      </div>
-                      <div class="form-check form-check-inline col-6 col-sm-4 col-md-3 mx-0">
-                        <input class="form-check-input" type="checkbox" value="" id="check-distance" onclick="distanceIsChecked()" checked>
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Distance
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Export into CSV button -->
-          <div class="text-center mt-4 mb-2">
-            <a href="#" class="export btn btn-primary text-center">Export into CSV</a>
-          </div>
-
-          <!-- The table -->
-          <div id="dvData" class="mb-5">
-            <table class="table my-3">
-              <tbody id="mytable">
-                <tr>
-                  <td id="point" class="point"><b>Point</b></td>
-                  <td id="lat" class="lat"><b>Latitude</b></td>
-                  <td id="lng" class="lng"><b>Longitude</b></td>
-                  <td id="date" class="date"><b>Date</b></td>
-                  <td id="time" class="time"><b>Time</b></td>
-                  <td id="description" class="description"><b>Description</b></td>
-                  <td id="distance" class="distance"><b>Distance</b></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+    <section class="landing text-center">
+      <div class="container px-3">
+        <h1 class="my-4">Welcome to <span>Geospatial Data</span> Collection App</h1>
+        <p class="mb-5">Easily collect location points and export the data into your device.</p>
+        <a class="btn btn-success btn-lg col-10 col-sm-8 col-md-6 col-lg-4 my-3 rounded-0" href="/collection.html">Start Collecting Data</a>
       </div>
-    </section>
-    <section class="bottom">
-
     </section>
   </main>
   <footer>
 
   </footer>
-  <div class="hidden-elements">
-    <form id="popup-form">
-      <!-- CHANGE_MARKER_VALUE gets swapped out with markerId upon cloning the contents-->
-      <label for="description">Description: </label><br />
-      <input type="text" name="description" /><br />
-      <input type="hidden" name="markerId" value="CHANGE_MARKER_VALUE">
-      <input type="submit" value="Save Edit" onclick="updateDesc(event, CHANGE_MARKER_VALUE)"><br />
-    </form>
-  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
