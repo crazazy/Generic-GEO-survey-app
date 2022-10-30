@@ -104,14 +104,14 @@ function updateLocation() {
 // get the location of the user upon loading the web page (don't put a marker down yet)
 geo()
     .then(pos => pos.coords)
-    .then({latitude, longitude} => {
+    .then(({latitude, longitude}) => {
         map.setView([latitude, longitude], 12)
     })
 // mount the updating function to the button
 document.getElementById("update").addEventListener("click", updateLocation);
 
 // get a pretty image for the map from a tile server
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+let tileLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
@@ -121,34 +121,25 @@ const basicMap = document.getElementById('basic-map');
 const darkMap = document.getElementById('dark-map');
 const imageryMap = document.getElementById('imagery-map');
 
-basicMap.addEventListener('click', function() {
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-    basicMap.classList.add('map-selected');
-    imageryMap.classList.remove('map-selected');
-    darkMap.classList.remove('map-selected');
-});
+const updateLayer = ({url, attr}) => function(event) {
+    map.removeLayer(tileLayer);
+    tileLayer = L.tileLayer(url).addTo(map);
+    [basicMap, darkMap, imageryMap].map(el => el.classList.remove('map-selected'));
+    event.currentTarget.classList.add('map-selected');
+}
 
-darkMap.addEventListener('click', function() {
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-	maxZoom: 20,
-	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-}).addTo(map);
-    darkMap.classList.add('map-selected');
-    imageryMap.classList.remove('map-selected');
-    basicMap.classList.remove('map-selected');
-});
-
-imageryMap.addEventListener('click', function() {
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-}).addTo(map);
-    imageryMap.classList.add('map-selected');
-    darkMap.classList.remove('map-selected');
-    basicMap.classList.remove('map-selected');
-});
+basicMap.addEventListener('click', updateLayer({
+    url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}))
+darkMap.addEventListener('click', updateLayer({
+    url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+    attr: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+}))
+imageryMap.addEventListener('click', updateLayer({
+    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attr:'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+}))
 
 // Export the markers to geoJSON
 function exportJSON(type, shapeDesc="Undescripted") {
