@@ -28,7 +28,11 @@ function undoHistory() {
     if (history.length > 0) {
 	let undoMarker = markers[history.pop()];
 	undoMarker.pos.shift();
-	undoMarker.marker.setLatLng(undoMarker.pos[0]);
+	if (undoMarker.pos.length > 0) {
+            undoMarker.marker.setLatLng(undoMarker.pos[0]);
+        } else {
+            map.removeLayer(undoMarker)
+        }
     }
 }
 
@@ -89,6 +93,7 @@ function updateLocation() {
                 marker: L.marker(pos, {title: markerId.toString(), draggable: true})
             }
             markers.push(marker)
+            history.push(markerId)
             // center the map based on where we are, with a zoom level of 13
             map.setView(pos, 12);
             // add the marker for a precise location
@@ -194,7 +199,7 @@ const emptyTableContent = table.innerHTML;
 function updateTable() {
     // empty the entire table
     table.innerHTML = emptyTableContent;
-    for (marker of markers) {
+    for (marker of markers.filter(marker => marker.pos > 0)) {
         const [lat, lng] = marker.pos[0];
         let distance = 0
         if (marker.markerId > 0) {
