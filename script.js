@@ -31,7 +31,7 @@ function undoHistory() {
 	if (undoMarker.pos.length > 0) {
             undoMarker.marker.setLatLng(undoMarker.pos[0]);
         } else {
-            map.removeLayer(undoMarker)
+            map.removeLayer(undoMarker.marker)
         }
     }
     updateTable()
