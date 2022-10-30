@@ -65,6 +65,7 @@ function updateDesc(event, markerId) {
     const descNode = event.target.form.querySelector("input[type=\"text\"]");
     const desc = descNode.value;
     markers[markerId].desc = desc
+    updateTable()
 }
 //updates the location on the map
 function updateLocation() {
@@ -103,6 +104,7 @@ function updateLocation() {
        	    marker.marker.on('dragend', updateTable)
             marker.marker.addTo(map)
 	    createPolyline()
+            updateTable()
         })
         .catch((err) => document.body.innerHTML += err.message);
 }
@@ -199,7 +201,7 @@ const emptyTableContent = table.innerHTML;
 function updateTable() {
     // empty the entire table
     table.innerHTML = emptyTableContent;
-    for (marker of markers.filter(marker => marker.pos > 0)) {
+    for (marker of markers.filter(marker => marker.pos.length > 0)) {
         const [lat, lng] = marker.pos[0];
         let distance = 0
         if (marker.markerId > 0) {
@@ -208,13 +210,13 @@ function updateTable() {
         }
         const time = new Date(marker.timestamp);
         // done in the order of tbody#mytable
-        const tableData = { point: marker.markerId + 1, // Point id
-                            lat,                 // latitude
-                            lng,                 // longitude
-                            date: time.toDateString(), // date
-                            time: time.toTimeString(), // time
-                            description: marker.desc,         // description
-                            distance             // distance
+        const tableData = { point: marker.markerId + 1,
+                            lat,
+                            lng,
+                            date: time.toDateString(),
+                            time: time.toTimeString(),
+                            description: marker.desc,
+                            distance: distance.toPrecision(5) + ' meters'
                            }
         const tr = document.createElement('tr');
         for (datum in tableData) {
