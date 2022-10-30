@@ -28,8 +28,13 @@ function undoHistory() {
     if (history.length > 0) {
 	let undoMarker = markers[history.pop()];
 	undoMarker.pos.shift();
-	undoMarker.marker.setLatLng(undoMarker.pos[0]);
+	if (undoMarker.pos.length > 0) {
+            undoMarker.marker.setLatLng(undoMarker.pos[0]);
+        } else {
+            map.removeLayer(undoMarker.marker)
+        }
     }
+    updateTable()
 }
 
 function createPolyline() {
@@ -61,6 +66,7 @@ function updateDesc(event, markerId) {
     const descNode = event.target.form.querySelector("input[type=\"text\"]");
     const desc = descNode.value;
     markers[markerId].desc = desc
+    updateTable()
 }
 //updates the location on the map
 function updateLocation() {
@@ -89,6 +95,7 @@ function updateLocation() {
                 marker: L.marker(pos, {title: markerId.toString(), draggable: true})
             }
             markers.push(marker)
+            history.push(markerId)
             // center the map based on where we are, with a zoom level of 13
             map.setView(pos, 12);
             // add the marker for a precise location
@@ -98,16 +105,21 @@ function updateLocation() {
        	    marker.marker.on('dragend', updateTable)
             marker.marker.addTo(map)
 	    createPolyline()
+            updateTable()
         })
         .catch((err) => document.body.innerHTML += err.message);
 }
-// get the location of the user upon loading the web page
-updateLocation();
+// get the location of the user upon loading the web page (don't put a marker down yet)
+geo()
+    .then(pos => pos.coords)
+    .then(({latitude, longitude}) => {
+        map.setView([latitude, longitude], 12)
+    })
 // mount the updating function to the button
 document.getElementById("update").addEventListener("click", updateLocation);
 
 // get a pretty image for the map from a tile server
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+let tileLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
@@ -117,35 +129,25 @@ const basicMap = document.getElementById('basic-map');
 const darkMap = document.getElementById('dark-map');
 const imageryMap = document.getElementById('imagery-map');
 
-basicMap.addEventListener('click', function() {
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-    basicMap.classList.add('map-selected');
-    imageryMap.classList.remove('map-selected');
-    darkMap.classList.remove('map-selected');
-});
+const updateLayer = ({url, attr}) => function(event) {
+    map.removeLayer(tileLayer);
+    tileLayer = L.tileLayer(url).addTo(map);
+    [basicMap, darkMap, imageryMap].map(el => el.classList.remove('map-selected'));
+    event.currentTarget.classList.add('map-selected');
+}
 
-darkMap.addEventListener('click', function() {
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-	subdomains: 'abcd',
-	maxZoom: 20
-}).addTo(map);
-    darkMap.classList.add('map-selected');
-    imageryMap.classList.remove('map-selected');
-    basicMap.classList.remove('map-selected');
-});
-
-imageryMap.addEventListener('click', function() {
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-}).addTo(map);
-    imageryMap.classList.add('map-selected');
-    darkMap.classList.remove('map-selected');
-    basicMap.classList.remove('map-selected');
-});
+basicMap.addEventListener('click', updateLayer({
+    url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}))
+darkMap.addEventListener('click', updateLayer({
+    url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+    attr: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+}))
+imageryMap.addEventListener('click', updateLayer({
+    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attr:'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+}))
 
 // Export the markers to geoJSON
 function exportJSON(type, shapeDesc="Undescripted") {
@@ -200,7 +202,7 @@ const emptyTableContent = table.innerHTML;
 function updateTable() {
     // empty the entire table
     table.innerHTML = emptyTableContent;
-    for (marker of markers) {
+    for (marker of markers.filter(marker => marker.pos.length > 0)) {
         const [lat, lng] = marker.pos[0];
         let distance = 0
         if (marker.markerId > 0) {
@@ -209,113 +211,24 @@ function updateTable() {
         }
         const time = new Date(marker.timestamp);
         // done in the order of tbody#mytable
-        const tableData = [ marker.markerId + 1, // Point id
-                            //lat,                 // latitude
-                            //0lng,                 // longitude
-                            time.toDateString(), // date
-                            time.toTimeString(), // time
-                            marker.desc,         // description
-                            distance             // distance
-                          ]
+        const tableData = { point: marker.markerId + 1,
+                            lat,
+                            lng,
+                            date: time.toDateString(),
+                            time: time.toTimeString(),
+                            description: marker.desc,
+                            distance: distance.toPrecision(5) + ' meters'
+                           }
         const tr = document.createElement('tr');
-        for (datum of tableData) {
+        for (datum in tableData) {
             const td = document.createElement('td');
-            td.setAttribute('class', 'row-item');
-            td.innerText = datum;
+            td.setAttribute('class', 'row-item ' + datum);
+            td.innerText = tableData[datum];
             tr.append(td)
         }
         table.append(tr);
     }
 }
-
-// Show position and adding it to the table
-function showPosition(position) {
-    var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-    const newRow = document.createElement('tr');
-    table.append(newRow);
-
-    const tdId = document.createElement('td');
-    tdId.innerText = markers.length + 1;
-    tdId.classList.add('row-item');
-    tdId.classList.add('point');
-    newRow.append(tdId);
-
-    const td0 = document.createElement('td');
-    td0.innerText = position.coords.latitude;
-    td0.classList.add('row-item');
-    td0.classList.add('lat');
-    newRow.append(td0);
-
-    const td1 = document.createElement('td');
-    td1.innerText = position.coords.longitude;
-    td1.classList.add('row-item');
-    td1.classList.add('lng');
-    newRow.append(td1);
-
-    const td2 = document.createElement('td');
-    td2.innerText = date;
-    td2.classList.add('row-item');
-    td2.classList.add('date');
-    newRow.append(td2);
-
-    const td3 = document.createElement('td');
-    td3.innerText = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    td3.classList.add('row-item');
-    td3.classList.add('time');
-    newRow.append(td3);
-
-    const td4 = document.createElement('td');
-    td4.innerText = markers.description;
-    td4.classList.add('row-item');
-    td4.classList.add('description');
-    newRow.append(td4);
-
-    if (markers.length == 0) {
-        var distance = 0;
-    }
-    else {
-        // From https://stackoverflow.com/a/13841047
-        function dist(lon1, lat1, lon2, lat2) {
-            var R = 6371; // Radius of the earth in km
-            var dLat = (lat2-lat1).toRad();  // Javascript functions in radians
-            var dLon = (lon2-lon1).toRad(); 
-            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                    Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
-                    Math.sin(dLon/2) * Math.sin(dLon/2); 
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-            var d = R * c * 1000; // Distance in km
-            return d;
-        }
-        /** Converts numeric degrees to radians */
-        if (typeof(Number.prototype.toRad) === "undefined") {
-            Number.prototype.toRad = function() {
-            return this * Math.PI / 180;
-            }
-        }
-        const row = document.getElementsByTagName('tr');
-        const prevLat = parseFloat(row[markers.length].childNodes[1].childNodes[0].nodeValue);
-        const prevLng = parseFloat(row[markers.length].childNodes[2].childNodes[0].nodeValue);
-        var distance = dist(prevLng, prevLat, position.coords.longitude, position.coords.latitude);
-    }
-
-    const td5 = document.createElement('td');
-    td5.innerText = Math.round(distance * 10) / 10;
-    td5.classList.add('row-item');
-    td5.classList.add('distance');
-    newRow.append(td5);
-
-    pointIsChecked();
-    latIsChecked();
-    lngIsChecked();
-    dateIsChecked();
-    timeIsChecked();
-    descriptionIsChecked();
-    distanceIsChecked();
-}
-
 
 // =======================================================================
 // Export the Table as a CSV File
