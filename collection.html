@@ -43,15 +43,15 @@
 
         <!-- The map (and an undo button)-->
         <div class="col-12 col-lg-6">
-          <button class="btn btn-secondary btn-sm mb-2" onclick="undoHistory()"><i class="bi bi-arrow-counterclockwise"></i> Undo</button>
           <div id="map" class="map"></div>
         </div>
 
         <!-- Options -->
-        <div class="option col-12 col-lg-6 my-auto">
+        <div class="option col-12 col-lg-6">
           <!-- Collect Point Button -->
-          <div class="collect text-center mt-2 mb-4">
+          <div class="collect mb-4 text-center">
             <button id="update" class="btn btn-success btn-lg col-12 rounded-0"><i class="bi bi-geo-alt"></i> Collect Point Here</button>
+            <button class="btn btn-secondary btn-sm mt-2 rounded-0" onclick="undoHistory()"><i class="bi bi-arrow-counterclockwise"></i> Undo</button>
           </div>
 
           <!-- Accordion -->

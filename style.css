@@ -34,7 +34,7 @@ html {
 }
 
 .map {
-    height: 50vh;
+    height: 40vh;
     margin: 0 0 5% 0;
 }
 
@@ -67,9 +67,17 @@ html {
     background-color: rgb(223, 223, 223);
 }
 
+/* Screen Width Responsiveness */
+
+@media only screen and (min-width: 576px) {
+    .map {
+        height: 50vh;
+    }
+}
+
 @media only screen and (min-width: 768px) {
     .map {
-        height: 80vh;
+        height: 60vh;
     }
 
     .landing h1 {
@@ -79,5 +87,11 @@ html {
 
     .landing p {
         font-size: 110%;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .map {
+        height: 80vh;
     }
 }
