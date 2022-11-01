@@ -135,7 +135,7 @@ footer {
 }
 
 .map-selected {
-    background-color: rgb(201, 213, 199);
+    background-color: var(--green);
 }
 
 .basemap {
@@ -144,14 +144,15 @@ footer {
 
 .basic-map, .dark-map, .imagery-map {
     cursor: pointer;
+    border: solid 2px --text-color;
 }
 
 .basic-map:hover, .dark-map:hover, .imagery-map:hover {
-    background-color: rgb(223, 223, 223);
+    background-color: var(--background);
 }
 
 .basic-map:active, .dark-map:active, .imagery-map:active {
-    background-color: rgb(223, 223, 223);
+    background-color: var(--background);
 }
 
 input[type='checkbox']:checked {
