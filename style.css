@@ -68,6 +68,10 @@ footer {
     color: #3a5236;
 }
 
+.map-container {
+    border-radius: 33px;
+}
+
 .map {
     height: 50vh;
     margin: 0 0 5% 0;
