@@ -1,5 +1,29 @@
+:root {
+    --background: #9fd496;
+    --green: #7fad78;
+    --text-color: #354b32;
+    --secondary: rgb(104, 104, 104);
+}
+
 html {
     font-family: 'Open Sans', sans-serif;
+    background-color: var(--background);
+}
+
+body {
+    background-color: var(--background);
+}
+
+header {
+    background-color: var(--background);
+}
+
+main {
+    background-color: var(--background);
+}
+
+footer {
+    background-color: var(--background);
 }
 
 .landing {
@@ -33,9 +57,64 @@ html {
     padding: 0 5%;
 }
 
+.top .title {
+    color: var(--text-color);
+    letter-spacing: 6px;
+    font-weight: bold;
+}
+
+.top .subtitle {
+    font-weight: 400;
+    color: #3a5236;
+}
+
 .map {
-    height: 40vh;
+    height: 50vh;
     margin: 0 0 5% 0;
+    border-radius: 33px;
+    border: solid 5px var(--text-color);
+}
+
+#update {
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--text-color);
+    background-color: rgb(255, 255, 255);
+    height: 65px;
+    border-radius: 23px;
+    letter-spacing: 4px;
+}
+
+.undo {
+    background: var(--secondary) !important;
+}
+
+.divider {
+    border: none;
+    height: 5px;
+    color: var(--text-color);
+    background-color: var(--text-color);
+}
+
+.table-overview {
+    color: var(--text-color);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 130%;
+    letter-spacing: 0.14em;
+}
+
+.accordion:active {
+    border: none;
+}
+
+.accordion .accordion-button {
+    background: var(--green);
+}
+
+#collapseOne {
+    background: var(--green);
 }
 
 .hidden-elements {
@@ -52,7 +131,7 @@ html {
 }
 
 .map-selected {
-    background-color: rgb(223, 223, 223);
+    background-color: rgb(201, 213, 199);
 }
 
 .basic-map, .dark-map, .imagery-map {
@@ -65,6 +144,38 @@ html {
 
 .basic-map:active, .dark-map:active, .imagery-map:active {
     background-color: rgb(223, 223, 223);
+}
+
+input[type='checkbox']:checked {
+    background-color: var(--background);
+}
+
+input[type='checkbox']:checked:after {
+    color:var(--background);
+}
+
+input[type='checkbox'] {
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    width: 20px !important;
+    height: 20px !important;
+    appearance:none;
+    border: var(--green);
+    border-radius: 3px;
+    box-shadow: none;
+    font-size: 1em;
+  }
+
+#table-head {
+    color: var(--text-color);
+}
+
+.export {
+    color: var(--text-color) !important;
+    border: none !important;
+    background: white !important;
+    font-weight: 500 !important;
 }
 
 /* Screen Width Responsiveness */
