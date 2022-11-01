@@ -134,6 +134,10 @@ footer {
     background-color: rgb(201, 213, 199);
 }
 
+.basemap {
+    background-color: rgb(255,255,255);
+}
+
 .basic-map, .dark-map, .imagery-map {
     cursor: pointer;
 }
