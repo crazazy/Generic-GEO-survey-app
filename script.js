@@ -149,7 +149,7 @@ const imageryMap = document.getElementById('imagery-map');
 
 const updateLayer = ({url, attr}) => function(event) {
     map.removeLayer(tileLayer);
-    tileLayer = L.tileLayer(url).addTo(map);
+    tileLayer = L.tileLayer(url, {attribution: attr}).addTo(map);
     [basicMap, darkMap, imageryMap].map(el => el.classList.remove('map-selected'));
     event.currentTarget.classList.add('map-selected');
 }
