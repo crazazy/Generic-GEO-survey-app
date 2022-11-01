@@ -69,13 +69,13 @@ footer {
 }
 
 .map-container {
-    border-radius: 33px;
+    /* border-radius: 33px; */
 }
 
 .map {
     height: 50vh;
     margin: 0 0 5% 0;
-    border-radius: 33px;
+    /* border-radius: 33px; */
     border: solid 5px var(--text-color);
 }
 
