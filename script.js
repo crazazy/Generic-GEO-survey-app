@@ -35,13 +35,31 @@ function undoHistory() {
         }
     }
     updateTable()
+    createPolyline()
 }
+
+// puts a undo button in the map
+class ExtraMapTools extends L.Control {
+    constructor() {
+        super('topright');
+    }
+    onAdd(map) {
+        const original = document.getElementById("maptools")
+        let result = original.cloneNode();
+        result.innerHTML = original.innerHTML;
+        result.removeAttribute("id");
+        return result
+    }
+}
+
+map.addControl(new ExtraMapTools())
 
 function createPolyline() {
     if (polyline != null) {
 	map.removeLayer(polyline);
     }
     const coords = markers
+          .filter(x => x.pos.length > 0)
 	  .map(x => x.marker.getLatLng())
 	  .map(({lat, lng}) => [lat, lng])
     polyline = L.polyline(coords, {color: 'blue'}).addTo(map);
@@ -96,8 +114,8 @@ function updateLocation() {
             }
             markers.push(marker)
             history.push(markerId)
-            // center the map based on where we are, with a zoom level of 13
-            map.setView(pos, 12);
+            // center the map based on the current set of points we have
+            map.fitBounds(markers.filter(x => x.pos.length > 0).map(x => x.pos[0]));
             // add the marker for a precise location
             marker.marker.bindPopup(createForm(markerId));
 	    marker.marker.on('move', createPolyline)
@@ -131,7 +149,7 @@ const imageryMap = document.getElementById('imagery-map');
 
 const updateLayer = ({url, attr}) => function(event) {
     map.removeLayer(tileLayer);
-    tileLayer = L.tileLayer(url).addTo(map);
+    tileLayer = L.tileLayer(url, {attribution: attr}).addTo(map);
     [basicMap, darkMap, imageryMap].map(el => el.classList.remove('map-selected'));
     event.currentTarget.classList.add('map-selected');
 }

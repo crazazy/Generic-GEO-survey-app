@@ -54,7 +54,7 @@
           <!-- Collect Point Button -->
           <div class="collect mb-4 text-center">
             <button id="update" class="btn btn-lg col-12"><i class="bi bi-geo-alt"></i> Collect Point Now</button>
-            <button class="undo btn btn-secondary btn-sm mt-3 rounded-3" onclick="undoHistory()"><i class="bi bi-arrow-counterclockwise"></i> Undo</button>
+            
           </div>
 
           <hr class="divider">
@@ -74,19 +74,6 @@
               <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                 data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                  <!-- Basemap Options -->
-                  <div class="basemap row mb-3">
-                    <h6>Basemap:</h6>
-                    <div id="basic-map" class="basic-map col-6 col-sm-4 map-selected">
-                      <p class="d-block text-center py-2 my-0">Basic Map</p>
-                    </div>
-                    <div id="dark-map" class="dark-map col-6 col-sm-4">
-                      <p class="d-block text-center py-2 my-0">Dark Map</p>
-                    </div>
-                    <div id="imagery-map" class="imagery-map col-6 col-sm-4">
-                      <p class="d-block text-center py-2 my-0">World Imagery</p>
-                    </div>
-                  </div>
                   <!-- Attributes -->
                   <div class="filters mb-3">
                     <h6>Table Attributes:</h6>
@@ -179,6 +166,22 @@
       <input type="hidden" name="markerId" value="CHANGE_MARKER_VALUE">
       <input type="submit" value="Save Edit" onclick="updateDesc(event, CHANGE_MARKER_VALUE)"><br />
     </form>
+    <div id="maptools" class="map-tools">
+      <button class="undo btn btn-secondary btn-sm mt-3 rounded-3" onclick="undoHistory()"><i class="bi bi-arrow-counterclockwise"></i> Undo</button><br>
+      <!-- Basemap Options -->
+      <div class="basemap row mb-3 rounded-4">
+        <div id="basic-map" class="basic-map col-6 col-sm-4 map-selected">
+          <p class="d-block text-center py-2 my-0"><i class="bi bi-sun"></i></p>
+        </div>
+        <div id="dark-map" class="dark-map col-6 col-sm-4">
+          <p class="d-block text-center py-2 my-0"><i class="bi bi-moon"></i></p>
+        </div>
+        <div id="imagery-map" class="imagery-map col-6 col-sm-4">
+          <p class="d-block text-center py-2 my-0"><i class="bi bi-image-alt"></i></p>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
