@@ -39,20 +39,20 @@ function undoHistory() {
 }
 
 // puts a undo button in the map
-class UndoHandler extends L.Control {
+class ExtraMapTools extends L.Control {
     constructor() {
         super('topright');
     }
     onAdd(map) {
-        const originalElement = document.getElementById("undobutton")
-        let result = originalElement.cloneNode();
-        result.innerHTML = originalElement.innerHTML;
+        const original = document.getElementById("maptools")
+        let result = original.cloneNode();
+        result.innerHTML = original.innerHTML;
         result.removeAttribute("id");
         return result
     }
 }
 
-map.addControl(new UndoHandler())
+map.addControl(new ExtraMapTools())
 
 function createPolyline() {
     if (polyline != null) {
