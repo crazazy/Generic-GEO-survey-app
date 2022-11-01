@@ -35,13 +35,31 @@ function undoHistory() {
         }
     }
     updateTable()
+    createPolyline()
 }
+
+// puts a undo button in the map
+class UndoHandler extends L.Control {
+    constructor() {
+        super('topright');
+    }
+    onAdd(map) {
+        const originalElement = document.getElementById("undobutton")
+        let result = originalElement.cloneNode();
+        result.innerHTML = originalElement.innerHTML;
+        result.removeAttribute("id");
+        return result
+    }
+}
+
+map.addControl(new UndoHandler())
 
 function createPolyline() {
     if (polyline != null) {
 	map.removeLayer(polyline);
     }
     const coords = markers
+          .filter(x => x.pos.length > 0)
 	  .map(x => x.marker.getLatLng())
 	  .map(({lat, lng}) => [lat, lng])
     polyline = L.polyline(coords, {color: 'blue'}).addTo(map);

@@ -54,7 +54,7 @@
           <!-- Collect Point Button -->
           <div class="collect mb-4 text-center">
             <button id="update" class="btn btn-lg col-12"><i class="bi bi-geo-alt"></i> Collect Point Now</button>
-            <button class="undo btn btn-secondary btn-sm mt-3 rounded-3" onclick="undoHistory()"><i class="bi bi-arrow-counterclockwise"></i> Undo</button>
+            
           </div>
 
           <hr class="divider">
@@ -179,6 +179,7 @@
       <input type="hidden" name="markerId" value="CHANGE_MARKER_VALUE">
       <input type="submit" value="Save Edit" onclick="updateDesc(event, CHANGE_MARKER_VALUE)"><br />
     </form>
+    <button id="undobutton" class="undo btn btn-secondary btn-sm mt-3 rounded-3" onclick="undoHistory()"><i class="bi bi-arrow-counterclockwise"></i> Undo</button>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
