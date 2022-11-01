@@ -114,8 +114,8 @@ function updateLocation() {
             }
             markers.push(marker)
             history.push(markerId)
-            // center the map based on where we are, with a zoom level of 13
-            map.setView(pos, 12);
+            // center the map based on the current set of points we have
+            map.fitBounds(markers.filter(x => x.pos.length > 0).map(x => x.pos[0]));
             // add the marker for a precise location
             marker.marker.bindPopup(createForm(markerId));
 	    marker.marker.on('move', createPolyline)
