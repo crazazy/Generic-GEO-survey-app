@@ -129,77 +129,6 @@ function updateLocation() {
         })
         .catch((err) => document.body.innerHTML += err.message);
 }
-// get the location of the user upon loading the web page (don't put a marker down yet)
-geo()
-    .then(pos => pos.coords)
-    .then(({latitude, longitude}) => {
-        map.setView([latitude, longitude], 12)
-        // try to fetch markers from localStorage
-        if (localStorage.getItem('markers') != null) {
-            markers = JSON.parse(localStorage.getItem('markers'))
-            markers = markers
-                .map(({markerId, pos, timestamp}) => ({
-                    markerId, pos, timestamp,
-                    marker: pos.length == 0 ? null : (L.marker(pos[0], {title: markerId.toString(), draggable: true})
-                                                      .bindPopup(createForm(markerId))
-                                                      .on('move', createPolyline)
-                                                      .on('dragend', addHistory(markerId))
-                                                      .on('dragend', updateTable)
-                                                      .addTo(map))
-                }))
-            createPolyLine();
-            updateTable();
-        }
-    })
-// mount the updating function to the button
-document.getElementById("update").addEventListener("click", updateLocation);
-
-function clearAll() {
-    if (confirm("Do you really wish to delete all geo data?")) {
-        // remove markers from map
-        markers
-            .filter(x => x.pos.length > 0) // these markers are already gone
-            .map(({marker}) => map.removeLayer(marker))
-        markers = [];
-        localStorage.clear();
-        // update visuals as well
-        createPolyLine();
-        updateTable();
-    }
-}
-
-// get a pretty image for the map from a tile server
-let tileLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-// Basemap Options
-const basicMap = document.getElementById('basic-map');
-const darkMap = document.getElementById('dark-map');
-const imageryMap = document.getElementById('imagery-map');
-
-const updateLayer = ({url, attr}) => function(event) {
-    map.removeLayer(tileLayer);
-    tileLayer = L.tileLayer(url, {attribution: attr}).addTo(map);
-    [basicMap, darkMap, imageryMap].map(el => el.classList.remove('map-selected'));
-    event.currentTarget.classList.add('map-selected');
-}
-
-basicMap.addEventListener('click', updateLayer({
-    url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}))
-darkMap.addEventListener('click', updateLayer({
-    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-}))
-imageryMap.addEventListener('click', updateLayer({
-    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    attr:'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-}))
-
-// Export the markers to geoJSON
 function exportJSON(type, shapeDesc="Undescripted") {
     switch (type) {
     case "points":
@@ -280,6 +209,78 @@ function updateTable() {
     }
 }
 
+
+// get the location of the user upon loading the web page (don't put a marker down yet)
+geo()
+    .then(pos => pos.coords)
+    .then(({latitude, longitude}) => {
+        map.setView([latitude, longitude], 12)
+        // try to fetch markers from localStorage
+        if (localStorage.getItem('markers') != null) {
+            markers = JSON.parse(localStorage.getItem('markers'))
+            markers = markers
+                .map(({markerId, pos, timestamp}) => ({
+                    markerId, pos, timestamp,
+                    marker: pos.length == 0 ? null : (L.marker(pos[0], {title: markerId.toString(), draggable: true})
+                                                      .bindPopup(createForm(markerId))
+                                                      .on('move', createPolyline)
+                                                      .on('dragend', addHistory(markerId))
+                                                      .on('dragend', updateTable)
+                                                      .addTo(map))
+                }))
+            createPolyLine();
+            updateTable();
+        }
+    })
+// mount the updating function to the button
+document.getElementById("update").addEventListener("click", updateLocation);
+
+function clearAll() {
+    if (confirm("Do you really wish to delete all geo data?")) {
+        // remove markers from map
+        markers
+            .filter(x => x.pos.length > 0) // these markers are already gone
+            .map(({marker}) => map.removeLayer(marker))
+        markers = [];
+        localStorage.clear();
+        // update visuals as well
+        createPolyLine();
+        updateTable();
+    }
+}
+
+// get a pretty image for the map from a tile server
+let tileLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+// Basemap Options
+const basicMap = document.getElementById('basic-map');
+const darkMap = document.getElementById('dark-map');
+const imageryMap = document.getElementById('imagery-map');
+
+const updateLayer = ({url, attr}) => function(event) {
+    map.removeLayer(tileLayer);
+    tileLayer = L.tileLayer(url, {attribution: attr}).addTo(map);
+    [basicMap, darkMap, imageryMap].map(el => el.classList.remove('map-selected'));
+    event.currentTarget.classList.add('map-selected');
+}
+
+basicMap.addEventListener('click', updateLayer({
+    url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}))
+darkMap.addEventListener('click', updateLayer({
+    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+}))
+imageryMap.addEventListener('click', updateLayer({
+    url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attr:'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+}))
+
+// Export the markers to geoJSON
 // =======================================================================
 // Export the Table as a CSV File
 // From https://stackoverflow.com/a/16203218
