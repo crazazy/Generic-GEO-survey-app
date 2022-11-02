@@ -219,8 +219,8 @@ geo()
         if (localStorage.getItem('markers') != null) {
             markers = JSON.parse(localStorage.getItem('markers'))
             markers = markers
-                .map(({markerId, pos, timestamp}) => ({
-                    markerId, pos, timestamp,
+                .map(({markerId, pos, timestamp, desc}) => ({
+                    markerId, pos, timestamp, desc,
                     marker: pos.length == 0 ? null : (L.marker(pos[0], {title: markerId.toString(), draggable: true})
                                                       .bindPopup(createForm(markerId))
                                                       .on('move', createPolyline)
