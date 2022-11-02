@@ -68,10 +68,14 @@ footer {
     color: #3a5236;
 }
 
+.map-container {
+    /* border-radius: 33px; */
+}
+
 .map {
     height: 50vh;
     margin: 0 0 5% 0;
-    border-radius: 33px;
+    /* border-radius: 33px; */
     border: solid 5px var(--text-color);
 }
 
@@ -131,7 +135,7 @@ footer {
 }
 
 .map-selected {
-    background-color: rgb(201, 213, 199);
+    background-color: var(--green);
 }
 
 .basemap {
@@ -140,14 +144,15 @@ footer {
 
 .basic-map, .dark-map, .imagery-map {
     cursor: pointer;
+    border: solid 2px --text-color;
 }
 
 .basic-map:hover, .dark-map:hover, .imagery-map:hover {
-    background-color: rgb(223, 223, 223);
+    background-color: var(--background);
 }
 
 .basic-map:active, .dark-map:active, .imagery-map:active {
-    background-color: rgb(223, 223, 223);
+    background-color: var(--background);
 }
 
 input[type='checkbox']:checked {
