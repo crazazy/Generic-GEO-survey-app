@@ -1,5 +1,6 @@
 // list of markers with metadata attached to it
 let markers = [];
+
 // list of the history of edited markers
 let history = [];
 
@@ -122,6 +123,7 @@ function updateLocation() {
 	    marker.marker.on('dragend', addHistory(markerId))
        	    marker.marker.on('dragend', updateTable)
             marker.marker.addTo(map)
+            localStorage.setItem('markers', JSON.stringify(markers.map(({marker, ...notMarkers}) => notMarkers)));
 	    createPolyline()
             updateTable()
         })
@@ -132,9 +134,39 @@ geo()
     .then(pos => pos.coords)
     .then(({latitude, longitude}) => {
         map.setView([latitude, longitude], 12)
+        // try to fetch markers from localStorage
+        if (localStorage.getItem('markers') != null) {
+            markers = JSON.parse(localStorage.getItem('markers'))
+            markers = markers
+                .map(({markerId, pos, timestamp}) => ({
+                    markerId, pos, timestamp,
+                    marker: pos.length == 0 ? null : (L.marker(pos[0], {title: markerId.toString(), draggable: true})
+                                                      .bindPopup(createForm(markerId))
+                                                      .on('move', createPolyline)
+                                                      .on('dragend', addHistory(markerId))
+                                                      .on('dragend', updateTable)
+                                                      .addTo(map))
+                }))
+            createPolyLine();
+            updateTable();
+        }
     })
 // mount the updating function to the button
 document.getElementById("update").addEventListener("click", updateLocation);
+
+function clearAll() {
+    if (confirm("Do you really wish to delete all geo data?")) {
+        // remove markers from map
+        markers
+            .filter(x => x.pos.length > 0) // these markers are already gone
+            .map(({marker}) => map.removeLayer(marker))
+        markers = [];
+        localStorage.clear();
+        // update visuals as well
+        createPolyLine();
+        updateTable();
+    }
+}
 
 // get a pretty image for the map from a tile server
 let tileLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
