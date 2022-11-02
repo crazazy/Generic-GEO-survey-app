@@ -228,7 +228,7 @@ geo()
                                                       .on('dragend', updateTable)
                                                       .addTo(map))
                 }))
-            createPolyLine();
+            createPolyline();
             updateTable();
         }
     })
@@ -244,7 +244,7 @@ function clearAll() {
         markers = [];
         localStorage.clear();
         // update visuals as well
-        createPolyLine();
+        createPolyline();
         updateTable();
     }
 }
