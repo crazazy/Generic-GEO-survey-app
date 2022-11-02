@@ -103,7 +103,7 @@ function updateLocation() {
 	})
     // this is where all the basic map manipulation happens
         .then((crd) => {
-            let pos = [crd.latitude.toFixed(5), crd.longitude.toFixed(5)];
+            let pos = [crd.latitude, crd.longitude];
             const markerId = markers.length;
             // a custom object containing the position and ID of a leaflet marker
             const marker = {
